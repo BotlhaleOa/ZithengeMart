@@ -16,15 +16,14 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     $pass2 = $_POST['confirm_password'];
 
     if(empty($name) || empty($email) || empty($pass)){
-        $error = "Please fill in all required fields.";
-
-    } elseif($pass !== $pass2){
-        $error = "Passwords do not match. Try again.";
-
-    } elseif(strlen($pass) < 6){
-        $error = "Password must consist of at least 6 characters.";
-
-    } else {
+    $error = "Please fill in all required fields.";
+} elseif($pass !== $pass2){
+    $error = "Passwords do not match.";
+} elseif(strlen($pass) < 6){
+    $error = "Password must be at least 6 characters.";
+} elseif(!empty($phone) && !preg_match('/^0[0-9]{9}$/', $phone)){
+    $error = "Please enter a valid South African phone number starting with 0 and 10 digits long.";
+} else {
 
         $check = $pdo->prepare("SELECT user_id FROM users WHERE email = ?");
         $check->execute(array($email));
@@ -79,7 +78,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
       </div>
       <div class="form-group">
         <label>Phone Number</label>
-        <input type="text" name="phone" placeholder="e.g. 073 115 4222">
+        <input type="text" name="phone" placeholder="e.g. 073 115 4222" maxlength="10">
+		<small style="color:#aaa; font-size:0.75rem; display:block; margin-top:4px;">South African number starting with 0, 10 digits</small>
       </div>
       <div class="form-group">
         <label>Password *</label>

@@ -30,6 +30,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_profile'])){
 
     if(empty($name)){
         $error = "Full name is required.";
+	} elseif(!empty($phone) && !preg_match('/^0[0-9]{9}$/', $phone)){
+    $error = "Please enter a valid South African phone number starting with 0 and 10 digits long.";	
     } else {
         $update = $pdo->prepare("UPDATE users SET full_name = ?, phone = ? WHERE user_id = ?");
         $update->execute(array($name, $phone, $user_id));
